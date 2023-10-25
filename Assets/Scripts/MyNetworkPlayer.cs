@@ -17,15 +17,6 @@ public class MyNetworkPlayer : NetworkBehaviour
     [SerializeField]
     private Color _displayColor = Color.white;
 
-    [Command]
-    private void CmdSetDisplayName(string newDisplayName)
-    {
-        RpcLogNewName(newDisplayName);
-
-        SetDisplayName(newDisplayName);
-    }
-    
-
     #region Server
 
     [Server]
@@ -38,6 +29,17 @@ public class MyNetworkPlayer : NetworkBehaviour
     public void SetDisplayColor(Color newDisplayColor)
     {
         _displayColor = newDisplayColor;
+    }
+
+    [Command]
+    private void CmdSetDisplayName(string newDisplayName)
+    {
+        //Authority check
+        if (newDisplayName.Length < 2 || newDisplayName.Length > 20){ return; }
+
+        RpcLogNewName(newDisplayName);
+
+        SetDisplayName(newDisplayName);
     }
 
     #endregion
